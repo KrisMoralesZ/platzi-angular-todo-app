@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { Task } from '../../models/task.model';
-import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -42,8 +42,8 @@ export class Home {
     if (this.newTaskControl.valid) {
       const value = this.newTaskControl.value.trim();
       if (value !== '') {
-        this.addTask(value)
-        this.newTaskControl.setValue('')
+        this.addTask(value);
+        this.newTaskControl.setValue('');
       }
     }
   }
@@ -64,6 +64,39 @@ export class Home {
           return {
             ...task,
             completed: !task.completed,
+          };
+        }
+        return task;
+      });
+    });
+  }
+
+  updateTaskEditingMode(index: number) {
+    this.tasks.update((prevState) => {
+      return prevState.map((task, position) => {
+        if (position === index) {
+          return {
+            ...task,
+            editing: true,
+          };
+        }
+        return {
+          ...task,
+          editing: false,
+        };
+      });
+    });
+  }
+
+  updateTaskText(index: number, event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.tasks.update((prevState) => {
+      return prevState.map((task, position) => {
+        if (position === index) {
+          return {
+            ...task,
+            title: input.value,
+            editing: false,
           };
         }
         return task;
