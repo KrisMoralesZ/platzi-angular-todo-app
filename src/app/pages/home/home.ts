@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  Injector,
+  signal,
+} from '@angular/core';
 import { Task } from '../../models/task.model';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -10,28 +17,28 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
   styleUrl: './home.css',
 })
 export class Home {
-  tasks = signal<Task[]>([
-    {
-      id: Date.now(),
-      title: 'Install Angular CLi',
-      completed: false,
-    },
-    {
-      id: Date.now(),
-      title: 'Create Project',
-      completed: false,
-    },
-    {
-      id: Date.now(),
-      title: 'Create Component',
-      completed: false,
-    },
-    {
-      id: Date.now(),
-      title: 'Create Service',
-      completed: false,
-    },
-  ]);
+  tasks = signal<Task[]>([]);
+
+  injector = inject(Injector);
+  trackTask() {
+    effect(
+      () => {
+        const tasks = this.tasks();
+        console.log(tasks);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+      },
+      { injector: this.injector }
+    );
+  }
+
+  ngOnInit() {
+    const storage = localStorage.getItem('tasks');
+    if (storage) {
+      const tasks = JSON.parse(storage);
+      this.tasks.set(tasks);
+    }
+    this.trackTask();
+  }
 
   filterTasks = signal<'all' | 'pending' | 'completed'>('all');
   tasksByFilter = computed(() => {
