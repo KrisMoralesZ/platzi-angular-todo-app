@@ -48,9 +48,24 @@
         <ng-template #elseBlock> items</ng-template>
       </span>
       <div class="filters">
-        <button (click)="changeFilter('all')" class="selected">All</button>
-        <button (click)="changeFilter('pending')">Pending</button>
-        <button (click)="changeFilter('completed')">Completed</button>
+        <button
+          (click)="changeFilter('all')"
+          [class.selected]="filterTasks() === 'all'"
+        >
+          All
+        </button>
+        <button
+          (click)="changeFilter('pending')"
+          [class.selected]="filterTasks() === 'pending'"
+        >
+          Pending
+        </button>
+        <button
+          (click)="changeFilter('completed')"
+          [class.selected]="filterTasks() === 'completed'"
+        >
+          Completed
+        </button>
         <button class="clear-completed">Clear completed</button>
       </div>
     </footer>
