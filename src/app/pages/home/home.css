@@ -259,9 +259,10 @@
 .footer {
   padding: 1rem 1.5rem;
   height: 20px;
-  text-align: center;
   font-size: 15px;
   border-top: 1px solid #e6e6e6;
+  display: flex;
+  justify-content: space-between;
 }
 
 .todo-count {
@@ -274,32 +275,27 @@
 }
 
 .filters {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  position: absolute;
-  right: 0;
-  left: 0;
+  display: flex;
+  justify-content: space-between;
 }
 
-.filters li {
-  display: inline;
-}
-
-.filters li a {
+.filters button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: inherit;
   margin: 3px;
-  padding: 3px 7px;
+  padding: 8px 16px;
   text-decoration: none;
   border: 1px solid transparent;
   border-radius: 3px;
 }
 
-.filters li a:hover {
+.filters button:hover {
   border-color: #6e49fe;
 }
 
-.filters li a.selected {
+.filters button.selected {
   border-color: #4c33b1;
 }
 
