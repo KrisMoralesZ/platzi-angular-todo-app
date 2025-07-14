@@ -10,60 +10,64 @@
         type="text"
         [formControl]="newTaskControl"
         (keydown.enter)="changeHandler()"
-      />
+        />
     </div>
   </header>
   <div class="container todoapp-wrapper">
     <!-- This section should be hidden by default and shown when there are todos -->
     <section class="main">
       <ul class="todo-list">
-        <li
-          (dblclick)="updateTaskEditingMode(i)"
-          *ngFor="let task of tasksByFilter(); index as i"
-          [class.editing]="task.editing"
-          [class.completed]="task.completed"
-        >
-          <div class="view">
+        @for (task of tasksByFilter(); track task; let i = $index) {
+          <li
+            (dblclick)="updateTaskEditingMode(i)"
+            [class.editing]="task.editing"
+            [class.completed]="task.completed"
+            >
+            <div class="view">
+              <input
+                (change)="updateTask(i)"
+                class="toggle"
+                type="checkbox"
+                [checked]="task.completed"
+                />
+              <label>{{ task.title }}</label>
+              <button class="destroy" (click)="deleteTask(i)"></button>
+            </div>
             <input
-              (change)="updateTask(i)"
-              class="toggle"
-              type="checkbox"
-              [checked]="task.completed"
-            />
-            <label>{{ task.title }}</label>
-            <button class="destroy" (click)="deleteTask(i)"></button>
-          </div>
-          <input
-            class="edit"
-            (keydown.enter)="updateTaskText(i, $event)"
-            [value]="task.title"
-          />
-        </li>
+              class="edit"
+              (keydown.enter)="updateTaskText(i, $event)"
+              [value]="task.title"
+              />
+          </li>
+        }
       </ul>
     </section>
     <footer class="footer">
       <span class="todo-count">
         <strong>{{ tasksByFilter().length }}</strong>
-        <span *ngIf="tasksByFilter().length === 1; else elseBlock"> item</span>
-        <ng-template #elseBlock> items</ng-template>
+        @if (tasksByFilter().length === 1) {
+          <span> item</span>
+        } @else {
+          items
+        }
       </span>
       <div class="filters">
         <button
           (click)="changeFilter('all')"
           [class.selected]="filterTasks() === 'all'"
-        >
+          >
           All
         </button>
         <button
           (click)="changeFilter('pending')"
           [class.selected]="filterTasks() === 'pending'"
-        >
+          >
           Pending
         </button>
         <button
           (click)="changeFilter('completed')"
           [class.selected]="filterTasks() === 'completed'"
-        >
+          >
           Completed
         </button>
       </div>
